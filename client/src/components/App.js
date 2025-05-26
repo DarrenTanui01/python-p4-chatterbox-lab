@@ -4,15 +4,14 @@ import Search from "./Search";
 import MessageList from "./MessageList";
 import NewMessage from "./NewMessage";
 
-const testUser = { username: "Duane" };
-
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [messages, setMessages] = useState([]);
   const [search, setSearch] = useState("");
+  const [username, setUsername] = useState("Duane"); 
 
   useEffect(() => {
-    fetch("http://127.0.0.1:4000/messages")
+    fetch("http://127.0.0.1:5555/messages")
       .then((r) => r.json())
       .then((messages) => setMessages(messages));
   }, []);
@@ -44,14 +43,22 @@ function App() {
   return (
     <main className={isDarkMode ? "dark-mode" : ""}>
       <Header isDarkMode={isDarkMode} onToggleDarkMode={setIsDarkMode} />
+      <div style={{ padding: "0.5rem" }}>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter your username"
+        />
+      </div>
       <Search search={search} onSearchChange={setSearch} />
       <MessageList
         messages={displayedMessages}
-        currentUser={testUser}
+        currentUser={{ username }}
         onMessageDelete={handleDeleteMessage}
         onUpdateMessage={handleUpdateMessage}
       />
-      <NewMessage currentUser={testUser} onAddMessage={handleAddMessage} />
+      <NewMessage currentUser={{ username }} onAddMessage={handleAddMessage} />
     </main>
   );
 }
